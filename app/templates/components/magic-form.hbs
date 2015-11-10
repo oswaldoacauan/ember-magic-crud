@@ -1,0 +1,8 @@
+{{#each definitions as |definition|}}
+  {{magic-input
+    model=model
+    attribute=definition.attribute
+    label=definition.label
+    errors=errors
+    submitted=submitted}}
+{{/each}}
