@@ -1,1 +1,1 @@
-export { default } from 'ember-imdt-magic-crud/mixins/magic-crud';
+export { default } from 'ember-imdt-magic-crud/mixins/magic-add-controller';
