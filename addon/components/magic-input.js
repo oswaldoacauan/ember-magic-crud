@@ -2,11 +2,25 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
 
+  //this is for the errors to be disabled on first iteration
   firstIteration: true,
 
-  // starts the input value
+  // starts the input value and type
   didInsertElement(){
     this.set('value', this.get(this.get('attribute')));
+
+    let inputType = this.get('type');
+
+    switch (inputType) {
+      case 'text':
+        this.set('text', true);
+        break;
+      case 'checkbox':
+        this.set('checkbox', true);
+        break;
+      default:
+        break;
+    }
   },
 
   // active input errors

@@ -6,11 +6,22 @@ const {
 } = Ember;
 
 export default Ember.Mixin.create(MagicCrud, {
+  // This is for the objects not to change and mess up the observers
   editDone: false,
+
+  // Validation options
   validationObject: 'validations',
+
+  // Definitions of the form
   definitionObject: 'definitions',
+
+  // Settings for the crud
   magicCrudObject: 'magicCrud',
+
+  // Route that corresponds to editing
   editRoute: 'edit',
+
+  // Route that corresponds to adding
   addRoute: 'add',
   formTemplate: 'magic-crud/form',
 
@@ -68,7 +79,7 @@ export default Ember.Mixin.create(MagicCrud, {
         return;
       }
 
-      controller.reopen(MagicCrud)
+      controller.reopen(MagicCrud);
 
       if(!controller.get(validationObject)){
         controller.set(validationObject, this.controllerFor(routeBase).get(validationObject));
@@ -135,7 +146,6 @@ export default Ember.Mixin.create(MagicCrud, {
     },
 
     willTransition(transition) {
-      console.log('done');
       let routeMethod = this.get('routeName').split('.')[1];
 
       if(routeMethod == 'add' || routeMethod == 'edit'){

@@ -1,4 +1,10 @@
 <div class="{{if activeErrors 'has-error'}}">
   <label for="{{attribute}}">{{label}}</label>
-  {{input type="text" value=value name=attribute}}
+
+  {{#if text}}
+    {{input type=type value=value name=attribute}}
+  {{else if checkbox}}
+    {{input type=type checked=value name=attribute}}
+  {{/if}}
+
 </div>
