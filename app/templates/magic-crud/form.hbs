@@ -1,8 +1,8 @@
-<h1>{{methodName}} {{modelName}}</h1>
+<h1>{{cptMethodName}} {{cptModelName}}</h1>
 
-<form class="right-form">
+<form class="form">
 {{magic-form model=model errors=errors definitions=definitions submitted=submitted}}
-<button type="button" name="button" {{action 'saveRecord'}}>Save</button>
+<button class="btn btn-primary" type="button" name="button" {{action 'saveRecord'}}>Save</button>
 </form>
 
 {{outlet}}

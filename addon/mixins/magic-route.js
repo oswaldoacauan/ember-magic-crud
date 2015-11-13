@@ -23,7 +23,12 @@ export default Ember.Mixin.create(MagicCrud, {
 
   // Route that corresponds to adding
   addRoute: 'add',
+
+  // Template for the form
   formTemplate: 'magic-crud/form',
+
+  // Template for the table
+  tableTemplate: 'magic-crud/table',
 
   // Sets up the model for the route
   model: function(param){
@@ -61,16 +66,29 @@ export default Ember.Mixin.create(MagicCrud, {
 
     controller.set('modelName', routeBase);
     controller.set('methodName', routeMethod);
+    if(routeBase && routeMethod){
+      controller.set('cptModelName', routeBase.charAt(0).toUpperCase() + routeBase.slice(1));
+      controller.set('cptMethodName', routeMethod.charAt(0).toUpperCase() + routeMethod.slice(1));
+    }
 
-    let renderTemplate = function(){
+    let formTemplate = function(){
       this.render(this.get('formTemplate'), {
         outlet: 'magic-form',
         controller: controller
       });
     }
 
+    let tableTemplate = function(){
+      this.render(this.get('tableTemplate'), {
+        controller: controller
+      });
+    }
+
     if(routeMethod == addRoute || routeMethod == editRoute){
-      this.set('renderTemplate', renderTemplate);
+      this.set('renderTemplate', formTemplate);
+    }
+    else{
+      this.set('renderTemplate', tableTemplate);
     }
 
     if(routeMethod == addRoute || routeMethod == editRoute){
@@ -101,8 +119,15 @@ export default Ember.Mixin.create(MagicCrud, {
 
   actions: {
     deleteRecord(item){
+      let routeMethod = this.get('routeName').split('.')[0];
+
+      this.transitionTo(routeMethod);
+      let flashMessages = Ember.get(this, 'flashMessages');
+
       item.deleteRecord();
       item.save();
+
+      flashMessages.success('Record deleted');
     },
 
     editRecord(item){
@@ -111,6 +136,12 @@ export default Ember.Mixin.create(MagicCrud, {
 
         this.transitionTo(routeMethod + '.edit', item);
       }
+    },
+
+    addRecord(){
+      let routeMethod = this.get('routeName').split('.')[0];
+
+      this.transitionTo(routeMethod + '.add');
     },
 
     saveRecord(){
@@ -137,7 +168,7 @@ export default Ember.Mixin.create(MagicCrud, {
             let definitions = controller.get('definitions');
             for(let def in definitions){
               if(definitions[def] && 'model.'+item === definitions[def].attribute && errors.get(item).length){
-                flashMessages.warning(definitions[def].label + ' ' + errors.get(item));
+                flashMessages.danger(definitions[def].label + ' ' + errors.get(item));
               }
             }
           }

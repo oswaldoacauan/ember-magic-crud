@@ -1,9 +1,12 @@
-{{#each definitions as |definition|}}
-  {{magic-input
-    model=model
-    attribute=definition.attribute
-    label=definition.label
-    errors=errors
-    type=definition.type
-    submitted=submitted}}
-{{/each}}
+<div>
+  {{#each definitions as |definition|}}
+    {{magic-input
+      model=model
+      attribute=definition.attribute
+      label=definition.label
+      type=definition.type
+      selectOptions=definition.select
+      errors=errors
+      submitted=submitted}}
+  {{/each}}
+</div>

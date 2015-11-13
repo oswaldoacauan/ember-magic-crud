@@ -1,10 +1,12 @@
 <div class="{{if activeErrors 'has-error'}}">
   <label for="{{attribute}}">{{label}}</label>
 
-  {{#if text}}
-    {{input type=type value=value name=attribute}}
-  {{else if checkbox}}
-    {{input type=type checked=value name=attribute}}
+  {{#if checkbox}}
+    {{input class="form-control" type=type checked=value name=attribute}}
+  {{else if switch}}
+    {{bs-switch class="form-control" checked=value on-text='Ativo' off-text='Inativo'}}
+  {{else if text}}
+    {{input class="form-control" type=type value=value name=attribute}}
   {{/if}}
 
 </div>

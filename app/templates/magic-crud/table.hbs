@@ -1,0 +1,11 @@
+<button class="add btn btn-success" type="button" name="button" {{action 'addRecord'}}>Add</button>
+
+
+{{imdt-table
+  content=model
+  tableClassNames='table table-striped table-hover'
+  columns=columns
+  deleteRecord='deleteRecord'
+  editRecord='editRecord'}}
+
+{{outlet 'magic-form'}}

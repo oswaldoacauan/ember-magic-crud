@@ -1,9 +1,9 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-
   //this is for the errors to be disabled on first iteration
   firstIteration: true,
+  names: Ember.A(['Tom', 'Yehuda', 'Mike']),
 
   // starts the input value and type
   didInsertElement(){
@@ -18,6 +18,11 @@ export default Ember.Component.extend({
       case 'checkbox':
         this.set('checkbox', true);
         break;
+      case 'switch':
+        this.set('switch', true);
+        break;
+      // case 'select':
+      //   this.set('select', true);
       default:
         break;
     }
