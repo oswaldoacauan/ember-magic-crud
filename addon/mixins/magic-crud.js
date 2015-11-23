@@ -12,7 +12,6 @@ export default Ember.Mixin.create(EmberValidations, {
     this._super();
     let definitions = this.get('definitions');
     if(definitions){
-      // console.log('123');
       let validations;
       definitions.forEach((definition) => {
         if(!validations){
