@@ -133,7 +133,6 @@ export default Ember.Mixin.create(MagicCrud, {
     editRecord(item){
       if(!item.get('isDirty')){
         let routeMethod = this.get('routeName').split('.')[0];
-
         this.transitionTo(routeMethod + '.edit', item);
       }
     },
