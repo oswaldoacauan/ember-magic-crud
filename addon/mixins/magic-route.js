@@ -157,6 +157,9 @@ export default Ember.Mixin.create(MagicCrud, {
           if(routeAfter){
             controller.transitionTo(routeAfter);
           }
+          else{
+            controller.transitionTo(this.get('routeName').split('.')[0]);
+          }
           let message = controller.get('magicCrud.success') || 'Record saved successfully!!';
           flashMessages.success(message);
         });
