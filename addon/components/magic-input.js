@@ -10,7 +10,6 @@ export default Ember.Component.extend({
     this.set('value', this.get(this.get('attribute')));
 
     let inputType = this.get('type');
-
     switch (inputType) {
       case 'text':
         this.set('text', true);
@@ -21,8 +20,15 @@ export default Ember.Component.extend({
       case 'switch':
         this.set('switch', true);
         break;
-      // case 'select':
-      //   this.set('select', true);
+      case 'select':
+        this.get('parentView.targetObject.store').findAll(this.get('selectContent')).then((data)=>{
+          this.set('fetchedContent', data);
+          this.set('processedPath', 'content.' + this.get('optionValuePath'));
+          this.set('processedLabel', 'content.' + this.get('optionLabelPath'));
+          if(this.get('fetchedContent')){
+            this.set('select', true);
+          }
+        });
       default:
         break;
     }
