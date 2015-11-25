@@ -1,9 +1,12 @@
 import Ember from 'ember';
 
+const {
+  getProperties
+} = Ember;
+
 export default Ember.Component.extend({
   //this is for the errors to be disabled on first iteration
   firstIteration: true,
-  names: Ember.A(['Tom', 'Yehuda', 'Mike']),
 
   // starts the input value and type
   didInsertElement(){
@@ -12,27 +15,45 @@ export default Ember.Component.extend({
     let inputType = this.get('type');
     switch (inputType) {
       case 'text':
-        this.set('text', true);
-        break;
+          this.set('text', true);
+          break;
       case 'checkbox':
-        this.set('checkbox', true);
-        break;
+          this.set('checkbox', true);
+          break;
       case 'switch':
-        this.set('switch', true);
-        break;
+          this.set('switch', true);
+          break;
       case 'select':
-        this.get('parentView.targetObject.store').findAll(this.get('selectContent')).then((data)=>{
-          this.set('fetchedContent', data);
-          this.set('processedPath', 'content.' + this.get('optionValuePath'));
-          this.set('processedLabel', 'content.' + this.get('optionLabelPath'));
-          if(this.get('fetchedContent')){
-            this.set('select', true);
-          }
-        });
+          this.set('select', true);
+          break;
       default:
         break;
     }
   },
+
+  processedContent: Ember.computed('selectContent', function(){
+    const{
+      optionValuePath,
+      optionLabelPath,
+      selectContent
+    } = getProperties(this, 'optionValuePath', 'optionLabelPath', 'selectContent');
+
+    this.set('processedPath', 'content');
+    this.set('processedLabel', 'content');
+
+    if(this.get('type') == 'select'){
+      this.set('processedPath', 'content.' + optionValuePath);
+      this.set('processedLabel', 'content.' + optionLabelPath);
+
+      let processedContent = null;
+      // console.log(this.get('selectContent'));
+      processedContent = this.get('selectContent');
+
+      return processedContent;
+    }
+
+    return null;
+  }),
 
   // active input errors
   activeErrors: Ember.computed('value', 'model', 'errors', 'submitted', function(){

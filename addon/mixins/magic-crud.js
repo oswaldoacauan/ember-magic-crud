@@ -13,7 +13,7 @@ export default Ember.Mixin.create(EmberValidations, {
     let definitions = this.get('definitions');
     if(definitions){
       let validations;
-      definitions.forEach((definition) => {
+      definitions.forEach((definition, key) => {
         if(!validations){
           validations = {};
         }
@@ -23,6 +23,12 @@ export default Ember.Mixin.create(EmberValidations, {
             validations[definition.attribute][key] = definition.validations[key];
           }
         }
+
+        if(definition.selectFunction){
+          let selectFunction = definition.selectFunction;
+          this.set('definitions.' + [key] + '.selectContent', selectFunction(this));
+        }
+
       });
 
       let base = {};

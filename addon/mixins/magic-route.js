@@ -37,6 +37,8 @@ export default Ember.Mixin.create(MagicCrud, {
       editRoute
     } = getProperties(this, 'addRoute', 'editRoute');
 
+    console.log(this.get('routeName') + " - Computed Model");
+
     let routeBase = this.get('routeName').split('.')[0];
     let routeMethod = this.get('routeName').split('.')[1];
 
@@ -184,6 +186,8 @@ export default Ember.Mixin.create(MagicCrud, {
       if(routeMethod == 'add' || routeMethod == 'edit'){
         this.get('controller').get('model').rollback();
       }
+
+      console.log('Out');
     }
   }
 });
