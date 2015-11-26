@@ -2,48 +2,41 @@ import Ember from 'ember';
 import EmberValidations from 'ember-validations'
 
 export default Ember.Mixin.create(EmberValidations, {
+  
+  // Definitions Object name
+  definitionObject: 'formDefinitionsMC',
+
+  // Validation definitions
   validations: null,
-  definitions: null,
+
+  // Form and validation definitions
+  formDefinitionsMC: null,
+
+  // MagicCrud custom definitions
   magicCrud: null,
 
-  reInit: 1,
+  // Flag for initializeIfNotAlreadyMC
+  isInitializedMC: false,
 
+  // Set the definitions and rerun once
   init(){
     this._super();
-    let definitions = this.get('definitions');
-    if(definitions){
-      let validations;
-      definitions.forEach((definition, key) => {
-        if(!validations){
-          validations = {};
-        }
-        if(definition.validations){
-          validations[definition.attribute] = {};
-          for(let key in definition.validations){
-            validations[definition.attribute][key] = definition.validations[key];
-          }
-        }
+    this.setDefinitionsMC();
+    this.initializeIfNotAlreadyMC();
+  },
 
-        if(definition.selectFunction){
-          let selectFunction = definition.selectFunction;
-          this.set('definitions.' + [key] + '.selectContent', selectFunction(this));
-        }
-
-      });
-
-      let base = {};
-      if(!Object.keys(this.get('validations')).length)
-        this.set('validations', validations);
-    }
-
-    if(this.get('reInit') > 0){
-      this.set('reInit', this.get('reInit') - 1);
+  // Runs init if not run yet
+  initializeIfNotAlreadyMC(){
+    if(!this.get('isInitializedMC')){
+      this.set('isInitializedMC', true);
       this.init();
     }
   },
 
-  didModelChange: Ember.observer('model', function(){
-    let definitions = this.get('definitions');
+  // Set the definitions
+  setDefinitionsMC(){
+    let definitionObject = this.get('definitionObject');
+    let definitions = this.get(definitionObject);
     if(definitions){
       let validations;
       definitions.forEach((definition, key) => {
@@ -59,7 +52,7 @@ export default Ember.Mixin.create(EmberValidations, {
 
         if(definition.selectFunction){
           let selectFunction = definition.selectFunction;
-          this.set('definitions.' + [key] + '.selectContent', selectFunction(this));
+          this.set(definitionObject + '.' + [key] + '.selectContent', selectFunction(this));
         }
 
       });
@@ -68,5 +61,10 @@ export default Ember.Mixin.create(EmberValidations, {
       if(!Object.keys(this.get('validations')).length)
         this.set('validations', validations);
     }
+  },
+
+  // Rerun setDefinitionsMC on model change, this is for reloading fetched parameters of forms e.g: select input
+  didModelChangeMC: Ember.observer('model', function(){
+    this.setDefinitionsMC()
   }),
 });

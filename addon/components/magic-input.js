@@ -5,15 +5,14 @@ const {
 } = Ember;
 
 export default Ember.Component.extend({
-  //this is for the errors to be disabled on first iteration
+  //Flag for disabling errors on first iteration
   firstIteration: true,
 
-  // starts the input value and type
+  // Starts the input value and type
   didInsertElement(){
     this.set('value', this.get(this.get('attribute')));
 
-    let inputType = this.get('type');
-    switch (inputType) {
+    switch (this.get('type')) {
       case 'text':
           this.set('text', true);
           break;
@@ -30,7 +29,8 @@ export default Ember.Component.extend({
         break;
     }
   },
-  
+
+  // Select processed content
   processedContent: Ember.computed('selectContent', function(){
     const{
       optionValuePath,
@@ -38,25 +38,18 @@ export default Ember.Component.extend({
       selectContent
     } = getProperties(this, 'optionValuePath', 'optionLabelPath', 'selectContent');
 
-    this.set('processedPath', 'content');
-    this.set('processedLabel', 'content');
-
     if(this.get('type') == 'select'){
-      this.set('processedPath', 'content.' + optionValuePath);
-      this.set('processedLabel', 'content.' + optionLabelPath);
+      this.set('processedPath', (optionValuePath) ? 'content.' + optionValuePath : 'content');
+      this.set('processedLabel', (optionLabelPath) ? 'content.' + optionLabelPath : 'content');
 
-      let processedContent = null;
-      // console.log(this.get('selectContent'));
-
-      processedContent = this.get('selectContent');
+      let processedContent = this.get('selectContent');
 
       return processedContent;
     }
-
     return null;
   }),
 
-  // active input errors
+  // Active input errors
   activeErrors: Ember.computed('value', 'model', 'errors', 'submitted', function(){
     if(this.get('firstIteration') !== true){
       return this.get('errors.'+this.get('attribute'));
@@ -65,7 +58,7 @@ export default Ember.Component.extend({
     return null;
   }),
 
-  // input value
+  // Input value
   value: Ember.computed('attribute', 'model', {
     set(key, value) {
       this.set(this.get('attribute'), value);

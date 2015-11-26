@@ -5,17 +5,22 @@ const {
   getProperties
 } = Ember;
 
+let capitalize = function(string){
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 export default Ember.Mixin.create(MagicCrud, {
+
   // This is for the objects not to change and mess up the observers
   editDone: false,
 
-  // Validation options
+  // Validation Object name
   validationObject: 'validations',
 
-  // Definitions of the form
-  definitionObject: 'definitions',
+  // Definitions Object name
+  definitionObject: 'formDefinitionsMC',
 
-  // Settings for the crud
+  // Magic Crud Options object name
   magicCrudObject: 'magicCrud',
 
   // Route that corresponds to editing
@@ -30,167 +35,261 @@ export default Ember.Mixin.create(MagicCrud, {
   // Template for the table
   tableTemplate: 'magic-crud/table',
 
-  // Sets up the model for the route
+  // Save success message
+  saveMessage: 'Record saved successfully',
+
+  // Delete success message
+  deleteMessageSuccess: 'Record deleted',
+
+  // Delete fail message
+  deleteMessageFailed: 'The record couldn\'t be deleted',
+
+  // Split route name
+  routeSplit: Ember.computed('routeName', function(){
+    return this.get('routeName').split('.');
+  }),
+
+  // Route base name
+  routeBase: Ember.computed('routeSplit', function(){
+    return this.get('routeSplit')[0];
+  }),
+
+  // Route method name
+  routeMethod: Ember.computed('routeSplit', function(){
+    return this.get('routeSplit')[1];
+  }),
+
+  // Route's model
   model: function(param){
     const{
       addRoute,
-      editRoute
-    } = getProperties(this, 'addRoute', 'editRoute');
+      editRoute,
+      routeBase,
+      routeMethod
+    } = getProperties(this, 'addRoute', 'editRoute', 'routeBase', 'routeMethod');
 
-    console.log(this.get('routeName') + " - Computed Model");
-
-    let routeBase = this.get('routeName').split('.')[0];
-    let routeMethod = this.get('routeName').split('.')[1];
-
-    if(routeMethod == addRoute){
-      return this.store.createRecord(routeBase);
+    switch (routeMethod) {
+      case addRoute:
+        return this.store.createRecord(routeBase);
+      case editRoute:
+        return this.store.findRecord(routeBase, param.id);
+      default:
+        return this.store.findAll(routeBase);
     }
-    else if(routeMethod == editRoute){
-      return this.store.findRecord(routeBase, param.id);
-    }
-    return this.store.findAll(routeBase);
   },
 
-  //
-  setupController(controller, model) {
+  // Sets controller's route name related properties
+  setControllerRouteNameMethod(){
     const{
-      addRoute,
-      editRoute,
+      controller,
+      routeBase,
+      routeMethod,
+    } = getProperties(this, 'controller', 'routeBase', 'routeMethod');
+
+    controller.setProperties({
+      capitalModelName: (routeBase) ? capitalize(routeBase) : null,
+      capitalMethodName: (routeMethod) ? capitalize(routeMethod) : null
+    });
+  },
+
+  // Mixin and set controller definitions
+  mixinAndSetControllerDefinitionObjects(){
+    const{
+      controller,
+      routeBase,
       validationObject,
       definitionObject,
-      magicCrudObject
-    } = getProperties(this, 'addRoute', 'editRoute', 'validationObject', 'definitionObject', 'magicCrudObject');
+      magicCrudObject,
+    } = getProperties(this, 'controller', 'routeBase', 'validationObject', 'definitionObject', 'magicCrudObject');
 
-    this._super(controller, model);
+    controller.reopen(MagicCrud);
 
-    let routeBase = this.get('routeName').split('.')[0];
-    let routeMethod = this.get('routeName').split('.')[1];
-
-    controller.set('modelName', routeBase);
-    controller.set('methodName', routeMethod);
-    if(routeBase && routeMethod){
-      controller.set('cptModelName', routeBase.charAt(0).toUpperCase() + routeBase.slice(1));
-      controller.set('cptMethodName', routeMethod.charAt(0).toUpperCase() + routeMethod.slice(1));
+    if(!controller.get(validationObject)){
+      controller.set(validationObject, this.controllerFor(routeBase).get(validationObject));
     }
 
-    let formTemplate = function(){
-      this.render(this.get('formTemplate'), {
+    if(!controller.get(definitionObject)){
+      controller.set(definitionObject, this.controllerFor(routeBase).get(definitionObject));
+    }
+
+    if(!controller.get(magicCrudObject)){
+      controller.set(magicCrudObject, this.controllerFor(routeBase).get(magicCrudObject));
+    }
+  },
+
+  // Set templates for controller rendering
+  setTemplatesToRender(){
+    const{
+      controller,
+      routeMethod,
+      addRoute,
+      editRoute,
+      formTemplate,
+      tableTemplate
+    } = getProperties(this, 'controller', 'routeMethod', 'addRoute', 'editRoute', 'formTemplate', 'tableTemplate');
+
+    let formTemplateRenderer = function(){
+      this.render(formTemplate, {
         outlet: 'magic-form',
         controller: controller
       });
     }
 
-    let tableTemplate = function(){
-      this.render(this.get('tableTemplate'), {
+    let tableTemplateRenderer = function(){
+      this.render(tableTemplate, {
         controller: controller
       });
     }
 
-    if(routeMethod == addRoute || routeMethod == editRoute){
-      this.set('renderTemplate', formTemplate);
+    if(this.isAnActionRoute()){
+      this.set('renderTemplate', formTemplateRenderer);
     }
     else{
-      this.set('renderTemplate', tableTemplate);
+      this.set('renderTemplate', tableTemplateRenderer);
     }
+  },
 
-    if(routeMethod == addRoute || routeMethod == editRoute){
+  // True if route is edit or add
+  isAnActionRoute(){
+    const{
+      routeMethod,
+      addRoute,
+      editRoute,
+    } = getProperties(this, 'routeMethod', 'addRoute', 'editRoute');
 
-      if(this.get('editDone') && routeMethod == editRoute){
+    return routeMethod == addRoute || routeMethod == editRoute;
+  },
+
+  // Sets up the Route's Controller
+  setupController(controller, model) {
+    const{
+      addRoute,
+      editRoute,
+      routeBase,
+      routeMethod,
+      editDone
+    } = getProperties(this, 'addRoute', 'editRoute', 'routeBase', 'routeMethod', 'editDone');
+
+    this._super(controller, model);
+    this.setControllerRouteNameMethod();
+    this.setTemplatesToRender();
+
+    if(this.isAnActionRoute()){
+      if(editDone && routeMethod == editRoute){
         return;
       }
-
-      controller.reopen(MagicCrud);
-
-      if(!controller.get(validationObject)){
-        controller.set(validationObject, this.controllerFor(routeBase).get(validationObject));
-      }
-
-      if(!controller.get(definitionObject)){
-        controller.set(definitionObject, this.controllerFor(routeBase).get(definitionObject));
-      }
-
-      if(!controller.get(magicCrudObject)){
-        controller.set(magicCrudObject, this.controllerFor(routeBase).get(magicCrudObject));
-      }
-
+      this.mixinAndSetControllerDefinitionObjects();
       this.set('editDone', true);
     }
-
-    console.log('Setup controller.');
     this.controller.init();
   },
 
+  // Success saving record promisse callback
+  saveRecordSuccess(){
+    let controller = this.get('controller');
+    let routeBase = this.get('routeBase');
+    let saveMessage = this.get('saveMessage');
+    let flashMessages = Ember.get(this, 'flashMessages');
+
+    controller.get('model').save().then(() => {
+      let routeAfter;
+      if(controller.get('magicCrud') && (routeAfter = controller.get('magicCrud.routeAfter'))){
+        controller.transitionTo(routeAfter);
+      }
+      else{
+        controller.transitionTo(routeBase);
+      }
+      flashMessages.success(saveMessage);
+    });
+  },
+
+  // Fail saving record promisse callback
+  saveRecordFail(){
+    let controller = this.get('controller');
+    let flashMessages = Ember.get(this, 'flashMessages');
+    let definitionObject = this.get('definitionObject');
+
+    let errors = controller.get('errors.model');
+    for(let item in errors){
+      if(errors.hasOwnProperty(item)){
+        let definitions = controller.get(definitionObject);
+        for(let def in definitions){
+          if(definitions[def] && 'model.'+item === definitions[def].attribute && errors.get(item).length){
+            flashMessages.danger(definitions[def].label + ' ' + errors.get(item));
+          }
+        }
+      }
+    }
+  },
+
+  // Route Actions
   actions: {
+    //Delete record from store
     deleteRecord(item){
-      let routeMethod = this.get('routeName').split('.')[0];
+      const{
+        routeMethod,
+        deleteMessageSuccess,
+        deleteMessageFailed
+      } = getProperties(this, 'routeMethod', 'deleteMessageSuccess', 'deleteMessageFailed');
 
       this.transitionTo(routeMethod);
       let flashMessages = Ember.get(this, 'flashMessages');
 
       item.deleteRecord();
-      item.save();
-
-      flashMessages.success('Record deleted');
-    },
-
-    editRecord(item){
-      if(!item.get('isDirty')){
-        let routeMethod = this.get('routeName').split('.')[0];
-        this.transitionTo(routeMethod + '.edit', item);
-      }
-    },
-
-    addRecord(){
-      let routeMethod = this.get('routeName').split('.')[0];
-
-      this.transitionTo(routeMethod + '.add');
-    },
-
-    saveRecord(){
-      let controller = this.get('controller');
-
-      controller.set('submitted', true);
-
-      let flashMessages = Ember.get(this, 'flashMessages');
-
-      controller.validate().then(() => {
-        controller.get('model').save().then(() => {
-
-          let routeAfter = controller.get('magicCrud.routeAfter');
-          if(routeAfter){
-            controller.transitionTo(routeAfter);
-          }
-          else{
-            controller.transitionTo(this.get('routeName').split('.')[0]);
-          }
-          let message = controller.get('magicCrud.success') || 'Record saved successfully!!';
-          flashMessages.success(message);
-        });
-      }, function(){
-        let errors = controller.get('errors.model');
-        for(let item in errors){
-          if(errors.hasOwnProperty(item)){
-            let definitions = controller.get('definitions');
-            for(let def in definitions){
-              if(definitions[def] && 'model.'+item === definitions[def].attribute && errors.get(item).length){
-                flashMessages.danger(definitions[def].label + ' ' + errors.get(item));
-              }
-            }
-          }
-        }
+      item.save().then(() => {
+        flashMessages.success(deleteMessageSuccess);
+      },() => {
+        flashMessages.danger(deleteMessageFailed);
       });
     },
 
-    willTransition(transition) {
-      let definitionObject = this.get('definitionObject');
-      let routeBase = this.get('routeName').split('.')[0];
-      let routeMethod = this.get('routeName').split('.')[1];
+    // Transition to edit route
+    editRecord(item){
+      const{
+        routeBase,
+        editRoute
+      } = getProperties(this, 'routeBase', 'editRoute');
 
-      if(routeMethod == 'add' || routeMethod == 'edit'){
-        this.get('controller').get('model').rollback();
+      this.transitionTo(routeBase + '.' + editRoute, item);
+    },
+
+    // Transition to add route
+    addRecord(){
+      const{
+        routeBase,
+        addRoute
+      } = getProperties(this, 'routeBase', 'addRoute');
+
+      this.transitionTo(routeBase + '.' + addRoute);
+    },
+
+    // Save record
+    saveRecord(){
+      const{
+        saveMessage,
+        controller
+      } = getProperties(this, 'saveMessage', 'controller');
+
+      controller.set('submitted', true);
+      controller.validate().then(() => {
+        this.saveRecordSuccess();
+      }, () => {
+        this.saveRecordFail();
+      });
+    },
+
+    // Rollback model
+    willTransition(transition) {
+      const{
+        definitionObject,
+        routeBase,
+        routeMethod,
+        controller
+      } = getProperties(this, 'definitionObject', 'routeBase', 'routeMethod', 'controller');
+
+      if(this.isAnActionRoute()){
+        controller.get('model').rollback();
       }
-      console.log('will Transition - Set definitionObject to null');
-      this.set(controller.set(definitionObject, this.controllerFor(routeBase).get(definitionObject)), null);
     }
   }
 });
