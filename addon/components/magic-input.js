@@ -30,7 +30,7 @@ export default Ember.Component.extend({
         break;
     }
   },
-
+  
   processedContent: Ember.computed('selectContent', function(){
     const{
       optionValuePath,
@@ -47,6 +47,7 @@ export default Ember.Component.extend({
 
       let processedContent = null;
       // console.log(this.get('selectContent'));
+
       processedContent = this.get('selectContent');
 
       return processedContent;

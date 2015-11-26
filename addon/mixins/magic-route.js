@@ -116,6 +116,7 @@ export default Ember.Mixin.create(MagicCrud, {
       this.set('editDone', true);
     }
 
+    console.log('Setup controller.');
     this.controller.init();
   },
 
@@ -181,13 +182,15 @@ export default Ember.Mixin.create(MagicCrud, {
     },
 
     willTransition(transition) {
+      let definitionObject = this.get('definitionObject');
+      let routeBase = this.get('routeName').split('.')[0];
       let routeMethod = this.get('routeName').split('.')[1];
 
       if(routeMethod == 'add' || routeMethod == 'edit'){
         this.get('controller').get('model').rollback();
       }
-
-      console.log('Out');
+      console.log('will Transition - Set definitionObject to null');
+      this.set(controller.set(definitionObject, this.controllerFor(routeBase).get(definitionObject)), null);
     }
   }
 });
