@@ -67,6 +67,23 @@ export default Ember.Component.extend({
     get: function() {
       return this.get(this.get('attribute'));
     }
-  })
+  }),
+  //
+  // selectCusomValidate(){
+  //   let errors = this.get('errors');
+  //   errors["model"]["modelo"] = [];
+  //   errors["model"]["modelo"].push("teste");
+  //   console.log(this.get('errors'));
+  // },
+
+  actions:{
+    // onSelectInit(){
+    //   this.selectCusomValidate();
+    // },
+    //
+    // onSelectItem(){
+    //   this.selectCusomValidate();
+    // }
+  }
 
 });

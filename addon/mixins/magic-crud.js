@@ -2,7 +2,7 @@ import Ember from 'ember';
 import EmberValidations from 'ember-validations'
 
 export default Ember.Mixin.create(EmberValidations, {
-  
+
   // Definitions Object name
   definitionObject: 'formDefinitionsMC',
 
@@ -60,6 +60,8 @@ export default Ember.Mixin.create(EmberValidations, {
       let base = {};
       if(!Object.keys(this.get('validations')).length)
         this.set('validations', validations);
+
+      console.log(validations);
     }
   },
 
