@@ -58,15 +58,14 @@ export default Ember.Mixin.create(EmberValidations, {
       });
 
       let base = {};
-      if(!Object.keys(this.get('validations')).length)
+      if(!Object.keys(this.get('validations')).length){
         this.set('validations', validations);
-
-      console.log(validations);
+      }
     }
   },
 
   // Rerun setDefinitionsMC on model change, this is for reloading fetched parameters of forms e.g: select input
   didModelChangeMC: Ember.observer('model', function(){
-    this.setDefinitionsMC()
+    this.setDefinitionsMC();
   }),
 });

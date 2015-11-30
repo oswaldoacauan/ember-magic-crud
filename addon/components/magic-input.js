@@ -25,6 +25,9 @@ export default Ember.Component.extend({
       case 'select':
           this.set('select', true);
           break;
+      case 'multiselect':
+          this.set('multiSelect', true);
+          break;
       default:
         break;
     }
@@ -38,7 +41,7 @@ export default Ember.Component.extend({
       selectContent
     } = getProperties(this, 'optionValuePath', 'optionLabelPath', 'selectContent');
 
-    if(this.get('type') == 'select'){
+    if(this.get('type') == 'select' || this.get('type') == 'multiselect'){
       this.set('processedPath', (optionValuePath) ? 'content.' + optionValuePath : 'content');
       this.set('processedLabel', (optionLabelPath) ? 'content.' + optionLabelPath : 'content');
 
@@ -52,7 +55,7 @@ export default Ember.Component.extend({
   // Active input errors
   activeErrors: Ember.computed('value', 'model', 'errors', 'submitted', function(){
     if(this.get('firstIteration') !== true){
-      return this.get('errors.'+this.get('attribute'));
+      return this.get('errors.' + this.get('attribute'));
     }
     this.set('firstIteration', false);
     return null;
@@ -61,29 +64,13 @@ export default Ember.Component.extend({
   // Input value
   value: Ember.computed('attribute', 'model', {
     set(key, value) {
-      this.set(this.get('attribute'), value);
+      if(typeof value !== 'object'){
+        this.set(this.get('attribute'), value);
+      }
       return value;
     },
     get: function() {
       return this.get(this.get('attribute'));
     }
   }),
-  //
-  // selectCusomValidate(){
-  //   let errors = this.get('errors');
-  //   errors["model"]["modelo"] = [];
-  //   errors["model"]["modelo"].push("teste");
-  //   console.log(this.get('errors'));
-  // },
-
-  actions:{
-    // onSelectInit(){
-    //   this.selectCusomValidate();
-    // },
-    //
-    // onSelectItem(){
-    //   this.selectCusomValidate();
-    // }
-  }
-
 });

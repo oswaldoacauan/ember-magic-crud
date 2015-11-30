@@ -13,6 +13,14 @@
       optionValuePath=processedPath
       optionLabelPath=processedLabel
       selection=value}}
+
+  {{else if multiSelect}}
+    {{ember-selectize
+      multiple=true
+      content=processedContent
+      optionValuePath=processedPath
+      optionLabelPath=processedLabel
+      selection=value}}
   {{/if}}
 
 </div>
