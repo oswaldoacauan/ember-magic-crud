@@ -64,7 +64,7 @@ export default Ember.Component.extend({
   // Input value
   value: Ember.computed('attribute', 'model', {
     set(key, value) {
-      if(typeof value !== 'object'){
+      if(this.get('type') !== 'multiselect'){
         this.set(this.get('attribute'), value);
       }
       return value;

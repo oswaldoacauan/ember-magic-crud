@@ -227,12 +227,12 @@ export default Ember.Mixin.create(MagicCrud, {
     //Delete record from store
     deleteRecord(item){
       const{
-        routeMethod,
+        routeBase,
         deleteMessageSuccess,
         deleteMessageFailed
-      } = getProperties(this, 'routeMethod', 'deleteMessageSuccess', 'deleteMessageFailed');
+      } = getProperties(this, 'routeBase', 'deleteMessageSuccess', 'deleteMessageFailed');
 
-      this.transitionTo(routeMethod);
+      this.transitionTo(routeBase);
       let flashMessages = Ember.get(this, 'flashMessages');
 
       item.deleteRecord();
