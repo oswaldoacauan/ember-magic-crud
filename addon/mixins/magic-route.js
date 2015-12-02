@@ -44,6 +44,8 @@ export default Ember.Mixin.create(MagicCrud, {
   // Delete fail message
   deleteMessageFailed: 'The record couldn\'t be deleted',
 
+  canRollbackModel: true,
+
   // Split route name
   routeSplit: Ember.computed('routeName', function(){
     return this.get('routeName').split('.');
@@ -270,6 +272,8 @@ export default Ember.Mixin.create(MagicCrud, {
         controller
       } = getProperties(this, 'saveMessage', 'controller');
 
+      this.set('canRollbackModel', false);
+
       controller.set('submitted', true);
       controller.validate().then(() => {
         this.saveRecordSuccess();
@@ -287,9 +291,14 @@ export default Ember.Mixin.create(MagicCrud, {
         controller
       } = getProperties(this, 'definitionObject', 'routeBase', 'routeMethod', 'controller');
 
-      if(this.isAnActionRoute()){
+      if(this.isAnActionRoute() && this.get('canRollbackModel')){
         controller.get('model').rollback();
+        if(controller.get('model').rollbackAttributes){
+          controller.get('model').rollbackAttributes();
+        }
       }
+
+      this.set('canRollbackModel', true);
     }
   }
 });
