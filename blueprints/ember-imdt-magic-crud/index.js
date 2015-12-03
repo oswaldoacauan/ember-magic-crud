@@ -1,15 +1,16 @@
+'use strict';
+
 module.exports = {
-  description: ''
+  normalizeEntityName: function() {
+    // this prevents an error when the entityName is
+    // not specified (since that doesn't actually matter
+    // to us
+  },
 
-  // locals: function(options) {
-  //   // Return custom template variables here.
-  //   return {
-  //     foo: options.entity.options.foo
-  //   };
-  // }
-
-  afterInstall: function(options) {
-    var _this = this;
-    return _this.addPackagesToProject([{name: 'ember-cli-selectize', target: 'latest'}]);
+  afterInstall: function() {
+    return this.addPackagesToProject([{name: 'ember-cli-selectize', target: '0.4.3'},
+                                      {name: 'ember-bootstrap-switch', target: '0.2.0'},
+                                      {name: 'ember-validations', target: '^2.0.0-alpha.4'},
+                                      {name: 'ember-imdt-table', target: 'latest'}]);
   }
 };

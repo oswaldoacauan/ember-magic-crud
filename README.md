@@ -1,17 +1,14 @@
 # Ember Magic Crud
-
 This Ember Addon is a utility for simplifying the adition of simple CRUD (Create, Read, Update and Delete) functionality to ember projects.
 
-## Prerequisites
- As of now ember addons do not support nesting, so we need to have some dependencies installed on our host application in order for this to work properly
+## Dependencies
+In order for this addon to work it will have to install it's required addons to your host application, but don't worry, they are mostly for displaying information, the addons that will be installed with ember-imdt-magic-crud are ember-imdt-table, ember-validations, ember-bootstrap-switch, Ember-selectize.
 
-### Table
-* [Ember-imdt-table - Table component](www.google.com)
-
-### Forms
+### Pages
+* [Ember-imdt-table - Table component](https://www.npmjs.com/package/ember-imdt-table)
 * [Ember-validations - Form validation](https://github.com/dockyard/ember-validations)
 * [Ember-bootstrap-switch - Bootstrap switch](https://github.com/Panman8201/ember-bootstrap-switch)
-* [Ember-selectize - Select and multi select]()
+* [Ember-selectize - Select and multi select](https://github.com/miguelcobain/ember-cli-selectize)
 
 ## Setting up your magic-cruds
 
