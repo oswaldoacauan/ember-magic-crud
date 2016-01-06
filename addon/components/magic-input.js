@@ -37,11 +37,10 @@ export default Ember.Component.extend({
   processedContent: Ember.computed('selectContent', function(){
     const{
       optionValuePath,
-      optionLabelPath,
-      selectContent
-    } = getProperties(this, 'optionValuePath', 'optionLabelPath', 'selectContent');
+      optionLabelPath
+    } = getProperties(this, 'optionValuePath', 'optionLabelPath');
 
-    if(this.get('type') == 'select' || this.get('type') == 'multiselect'){
+    if(this.get('type') === 'select' || this.get('type') === 'multiselect'){
       this.set('processedPath', (optionValuePath) ? 'content.' + optionValuePath : 'content');
       this.set('processedLabel', (optionLabelPath) ? 'content.' + optionLabelPath : 'content');
 

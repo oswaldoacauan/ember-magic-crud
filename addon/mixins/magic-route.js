@@ -7,7 +7,7 @@ const {
 
 let capitalize = function(string){
   return string.charAt(0).toUpperCase() + string.slice(1);
-}
+};
 
 export default Ember.Mixin.create(MagicCrud, {
 
@@ -123,25 +123,22 @@ export default Ember.Mixin.create(MagicCrud, {
   setTemplatesToRender(){
     const{
       controller,
-      routeMethod,
-      addRoute,
-      editRoute,
       formTemplate,
       tableTemplate
-    } = getProperties(this, 'controller', 'routeMethod', 'addRoute', 'editRoute', 'formTemplate', 'tableTemplate');
+    } = getProperties(this, 'controller', 'formTemplate', 'tableTemplate');
 
     let formTemplateRenderer = function(){
       this.render(formTemplate, {
         outlet: 'magic-form',
         controller: controller
       });
-    }
+    };
 
     let tableTemplateRenderer = function(){
       this.render(tableTemplate, {
         controller: controller
       });
-    }
+    };
 
     if(this.isAnActionRoute()){
       this.set('renderTemplate', formTemplateRenderer);
@@ -159,25 +156,23 @@ export default Ember.Mixin.create(MagicCrud, {
       editRoute,
     } = getProperties(this, 'routeMethod', 'addRoute', 'editRoute');
 
-    return routeMethod == addRoute || routeMethod == editRoute;
+    return routeMethod === addRoute || routeMethod === editRoute;
   },
 
   // Sets up the Route's Controller
   setupController(controller, model) {
     const{
-      addRoute,
       editRoute,
-      routeBase,
       routeMethod,
       editDone
-    } = getProperties(this, 'addRoute', 'editRoute', 'routeBase', 'routeMethod', 'editDone');
+    } = getProperties(this, 'editRoute', 'routeMethod', 'editDone');
 
     this._super(controller, model);
     this.setControllerRouteNameMethod();
     this.setTemplatesToRender();
 
     if(this.isAnActionRoute()){
-      if(editDone && routeMethod == editRoute){
+      if(editDone && routeMethod === editRoute){
         return;
       }
       this.mixinAndSetControllerDefinitionObjects();
@@ -268,9 +263,8 @@ export default Ember.Mixin.create(MagicCrud, {
     // Save record
     saveRecord(){
       const{
-        saveMessage,
         controller
-      } = getProperties(this, 'saveMessage', 'controller');
+      } = getProperties(this, 'controller');
 
       this.set('canRollbackModel', false);
 
@@ -283,13 +277,10 @@ export default Ember.Mixin.create(MagicCrud, {
     },
 
     // Rollback model
-    willTransition(transition) {
+    willTransition() {
       const{
-        definitionObject,
-        routeBase,
-        routeMethod,
         controller
-      } = getProperties(this, 'definitionObject', 'routeBase', 'routeMethod', 'controller');
+      } = getProperties(this, 'controller');
 
       if(this.isAnActionRoute() && this.get('canRollbackModel')){
         controller.get('model').rollback();

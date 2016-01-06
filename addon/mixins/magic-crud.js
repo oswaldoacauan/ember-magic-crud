@@ -1,5 +1,5 @@
 import Ember from 'ember';
-import EmberValidations from 'ember-validations'
+import EmberValidations from 'ember-validations';
 
 export default Ember.Mixin.create(EmberValidations, {
 
@@ -45,8 +45,8 @@ export default Ember.Mixin.create(EmberValidations, {
         }
         if(definition.validations){
           validations[definition.attribute] = {};
-          for(let key in definition.validations){
-            validations[definition.attribute][key] = definition.validations[key];
+          for(let validationKey in definition.validations){
+            validations[definition.attribute][validationKey] = definition.validations[validationKey];
           }
         }
 
@@ -57,7 +57,6 @@ export default Ember.Mixin.create(EmberValidations, {
 
       });
 
-      let base = {};
       if(!Object.keys(this.get('validations')).length){
         this.set('validations', validations);
       }
