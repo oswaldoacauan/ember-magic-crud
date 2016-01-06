@@ -5383,8 +5383,8 @@ define('crud-baseline/validators/relationship-presence', ['exports', 'ember-vali
 
 /* jshint ignore:start */
 
-define('crud-baseline/config/environment', ['ember'], function(Ember) {
-  var prefix = 'crud-baseline';
+define('ember-magic-crud/config/environment', ['ember'], function(Ember) {
+  var prefix = 'ember-magic-crud';
 /* jshint ignore:start */
 
 try {
@@ -5403,9 +5403,9 @@ catch(err) {
 });
 
 if (runningTests) {
-  require("crud-baseline/tests/test-helper");
+  require("ember-magic-crud/tests/test-helper");
 } else {
-  require("crud-baseline/app")["default"].create({"name":"crud-baseline","version":"0.0.0+a9bc8278"});
+  require("ember-magic-crud/app")["default"].create({"name":"crud-baseline","version":"0.0.0+a9bc8278"});
 }
 
 /* jshint ignore:end */
