@@ -41,8 +41,8 @@ export default Ember.Component.extend({
     } = getProperties(this, 'optionValuePath', 'optionLabelPath');
 
     if(this.get('type') === 'select' || this.get('type') === 'multiselect'){
-      this.set('processedPath', (optionValuePath) ? 'content.' + optionValuePath : 'content');
-      this.set('processedLabel', (optionLabelPath) ? 'content.' + optionLabelPath : 'content');
+      this.set('processedPath', optionValuePath);
+      this.set('processedLabel', optionLabelPath);
 
       let processedContent = this.get('selectContent');
 
@@ -63,6 +63,9 @@ export default Ember.Component.extend({
   // Input value
   value: Ember.computed('attribute', 'model', {
     set(key, value) {
+      console.log(key);
+      console.log(value);
+      console.log(this.get('attribute'));
       if(this.get('type') !== 'multiselect'){
         this.set(this.get('attribute'), value);
       }
@@ -72,4 +75,14 @@ export default Ember.Component.extend({
       return this.get(this.get('attribute'));
     }
   }),
+
+  actions:{
+    multipleSelectChange(array, a){
+      console.log(array.toString());
+      console.log(array);
+      console.log(this.get(this.get('attribute')).toString());
+      console.log(this.get(this.get('attribute')));
+      console.log(a);
+    }
+  }
 });

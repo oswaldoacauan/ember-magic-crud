@@ -1,7 +1,10 @@
 <button class="add btn btn-success" type="button" name="button" {{action 'addRecord'}}>Add</button>
-
-
+{{sortProperties}}
+{{#if sortPropertiesLoaded}}
+  123
+{{/if}}
 {{imdt-table
+  sortProperties=tableSortPropertiesMC
   content=model
   tableClassNames='table table-striped table-hover'
   columns=tableOptionsMC

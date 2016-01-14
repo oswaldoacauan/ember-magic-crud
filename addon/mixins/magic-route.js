@@ -117,6 +117,10 @@ export default Ember.Mixin.create(MagicCrud, {
     if(!controller.get(magicCrudObject)){
       controller.set(magicCrudObject, this.controllerFor(routeBase).get(magicCrudObject));
     }
+
+    if(!controller.get('sortProperties')){
+      controller.set('sortProperties', []);
+    }
   },
 
   // Set templates for controller rendering
