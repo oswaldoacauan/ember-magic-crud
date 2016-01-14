@@ -63,9 +63,9 @@ export default Ember.Component.extend({
   // Input value
   value: Ember.computed('attribute', 'model', {
     set(key, value) {
-      console.log(key);
-      console.log(value);
-      console.log(this.get('attribute'));
+      // console.log(key);
+      // console.log(value);
+      // console.log(this.get('attribute'));
       if(this.get('type') !== 'multiselect'){
         this.set(this.get('attribute'), value);
       }
@@ -76,13 +76,13 @@ export default Ember.Component.extend({
     }
   }),
 
-  actions:{
-    multipleSelectChange(array, a){
-      console.log(array.toString());
-      console.log(array);
-      console.log(this.get(this.get('attribute')).toString());
-      console.log(this.get(this.get('attribute')));
-      console.log(a);
-    }
-  }
+  // actions:{
+  //   multipleSelectChange(array, a){
+  //     console.log(array.toString());
+  //     console.log(array);
+  //     console.log(this.get(this.get('attribute')).toString());
+  //     console.log(this.get(this.get('attribute')));
+  //     console.log(a);
+  //   }
+  // }
 });
