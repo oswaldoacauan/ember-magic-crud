@@ -79,7 +79,6 @@ export default Ember.Mixin.create(MagicCrud, {
         return this.store.findAll(routeBase);
     }
   },
-
   // Sets controller's route name related properties
   setControllerRouteNameMethod(){
     const{
@@ -106,17 +105,9 @@ export default Ember.Mixin.create(MagicCrud, {
 
     controller.reopen(MagicCrud);
 
-    if(!controller.get(validationObject)){
-      controller.set(validationObject, this.controllerFor(routeBase).get(validationObject));
-    }
-
-    if(!controller.get(definitionObject)){
-      controller.set(definitionObject, this.controllerFor(routeBase).get(definitionObject));
-    }
-
-    if(!controller.get(magicCrudObject)){
-      controller.set(magicCrudObject, this.controllerFor(routeBase).get(magicCrudObject));
-    }
+    [validationObject, definitionObject, magicCrudObject].forEach((obj) => {
+        controller.set(obj, this.controllerFor(routeBase).get(obj));
+    });
 
     if(!controller.get('sortProperties')){
       controller.set('sortProperties', []);
@@ -133,17 +124,18 @@ export default Ember.Mixin.create(MagicCrud, {
 
     let formTemplateRenderer = function(){
       this.render(formTemplate, {
-        outlet: 'magic-form',
-        controller: controller
+        controller: controller,
+        into: 'application'
       });
     };
 
     let tableTemplateRenderer = function(){
       this.render(tableTemplate, {
-        controller: controller
+        controller: controller,
+        into: 'application'
       });
     };
-
+    
     if(this.isAnActionRoute()){
       this.set('renderTemplate', formTemplateRenderer);
     }
@@ -287,7 +279,7 @@ export default Ember.Mixin.create(MagicCrud, {
       } = getProperties(this, 'controller');
 
       if(this.isAnActionRoute() && this.get('canRollbackModel')){
-        controller.get('model').rollback();
+        // controller.get('model').rollback();
         if(controller.get('model').rollbackAttributes){
           controller.get('model').rollbackAttributes();
         }
