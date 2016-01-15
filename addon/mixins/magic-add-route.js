@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+const {
+  getProperties
+} = Ember;
+
 export default Ember.Mixin.create({
   actions:{
     saveRecord(){
