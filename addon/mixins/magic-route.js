@@ -185,7 +185,7 @@ export default Ember.Mixin.create(MagicCrud, {
     this.controller.init();
   },
 
-  // Success saving record promise callback
+  // Success saving record promisse callback
   saveRecordSuccess(){
     let controller = this.get('controller');
     let routeBase = this.get('routeBase');
@@ -195,16 +195,16 @@ export default Ember.Mixin.create(MagicCrud, {
     controller.get('model').save().then(() => {
       let routeAfter;
       if(controller.get('magicCrud') && (routeAfter = controller.get('magicCrud.routeAfter'))){
-        controller.transitionTo(routeAfter);
+        controller.transitionToRoute(routeAfter);
       }
       else{
-        controller.transitionTo(routeBase);
+        controller.transitionToRoute(routeBase);
       }
       flashMessages.success(saveMessage);
     });
   },
 
-  // Fail saving record promise callback
+  // Fail saving record promisse callback
   saveRecordFail(){
     let controller = this.get('controller');
     let flashMessages = Ember.get(this, 'flashMessages');
