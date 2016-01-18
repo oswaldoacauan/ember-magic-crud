@@ -132,7 +132,7 @@ export default Ember.Mixin.create({
       } = getProperties(this, 'controller');
 
       if(this.get('canRollbackModel')){
-        controller.get('model').rollback();
+        
         if(controller.get('model').rollbackAttributes){
           controller.get('model').rollbackAttributes();
         }
