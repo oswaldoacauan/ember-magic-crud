@@ -1,3 +1,5 @@
+# This documentation is old, it may not work with the current version of this addon, new documentation will come soon
+
 # Ember Magic Crud
 This Ember Addon is a utility for simplifying the adition of simple CRUD (Create, Read, Update and Delete) functionality to ember projects.
 
