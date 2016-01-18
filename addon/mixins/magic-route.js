@@ -108,10 +108,6 @@ export default Ember.Mixin.create(MagicCrud, {
     [validationObject, definitionObject, magicCrudObject].forEach((obj) => {
         controller.set(obj, this.controllerFor(routeBase).get(obj));
     });
-
-    if(!controller.get('sortProperties')){
-      controller.set('sortProperties', []);
-    }
   },
 
   // Set templates for controller rendering
@@ -135,7 +131,7 @@ export default Ember.Mixin.create(MagicCrud, {
         into: 'application'
       });
     };
-    
+
     if(this.isAnActionRoute()){
       this.set('renderTemplate', formTemplateRenderer);
     }
@@ -279,7 +275,7 @@ export default Ember.Mixin.create(MagicCrud, {
       } = getProperties(this, 'controller');
 
       if(this.isAnActionRoute() && this.get('canRollbackModel')){
-        // controller.get('model').rollback();
+        controller.get('model').rollback();
         if(controller.get('model').rollbackAttributes){
           controller.get('model').rollbackAttributes();
         }
