@@ -20,6 +20,8 @@ export default Ember.Mixin.create({
 
   canRollbackModel: true,
 
+  isThisLoaded: false,
+
   // Split route name
   routeSplit: Ember.computed('routeName', function(){
     return this.get('routeName').split('.');
@@ -42,11 +44,11 @@ export default Ember.Mixin.create({
   },
 
   model(){
+    console.log('Create Model');
     return this.store.createRecord(this.get('routeBase'));
   },
 
   setupController(controller, model) {
-    console.log('setupController');
     this._super(controller, model);
     const{
       routeBase,
@@ -56,9 +58,9 @@ export default Ember.Mixin.create({
     } = getProperties(this, 'routeBase', 'validationObject', 'definitionObject', 'magicCrudObject');
 
     controller.reopen(MagicCrud);
-
+    
     [validationObject, definitionObject, magicCrudObject].forEach((obj) => {
-        controller.set(obj, this.controllerFor(routeBase).get(obj));
+      controller.set(obj, this.controllerFor(routeBase).get(obj));
     });
 
     controller.init();
@@ -109,6 +111,8 @@ export default Ember.Mixin.create({
       } = getProperties(this, 'controller');
 
       controller.set('submitted', true);
+      console.log(controller.get('model'));
+      console.log(controller.get('validations'));
       controller.validate().then(() => {
         this.saveRecordSuccess();
       }, () => {
@@ -127,7 +131,7 @@ export default Ember.Mixin.create({
       } = getProperties(this, 'controller');
 
       if(this.get('canRollbackModel')){
-        
+
         if(controller.get('model').rollbackAttributes){
           controller.get('model').rollbackAttributes();
         }

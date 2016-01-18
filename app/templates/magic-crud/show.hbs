@@ -1,0 +1,9 @@
+<form class="form">
+  {{magic-form
+    model=model
+    errors=errors
+    definitions=formDefinitionsMC
+    submitted=submitted
+    readonly='true'}}
+  <button class="btn btn-danger" type="button" name="button" {{action 'cancelAction'}}>Back</button>
+</form>

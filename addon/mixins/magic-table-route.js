@@ -17,6 +17,9 @@ export default Ember.Mixin.create({
   // Route that corresponds to adding
   addRoute: 'add',
 
+  // Route that corresponds to showing
+  showRoute: 'show',
+
   // Split route name
   routeSplit: Ember.computed('routeName', function(){
     return this.get('routeName').split('.');
@@ -43,6 +46,15 @@ export default Ember.Mixin.create({
   },
 
   actions:{
+    showRecord(item){
+      const{
+        routeBase,
+        showRoute
+      } = getProperties(this, 'routeBase', 'showRoute');
+
+      this.transitionTo(routeBase + '.' + showRoute, item);
+    },
+
     addRecord(){
       const{
         routeBase,

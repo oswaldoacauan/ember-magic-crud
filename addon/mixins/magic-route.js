@@ -159,18 +159,21 @@ export default Ember.Mixin.create(MagicCrud, {
       editDone
     } = getProperties(this, 'editRoute', 'routeMethod', 'editDone');
 
-    this._super(controller, model);
-    this.setControllerRouteNameMethod();
-    this.setTemplatesToRender();
+    if(!this.get('isSetup')){
+      this._super(controller, model);
+      this.setControllerRouteNameMethod();
+      this.setTemplatesToRender();
 
-    if(this.isAnActionRoute()){
-      if(editDone && routeMethod === editRoute){
-        return;
+      if(this.isAnActionRoute()){
+        if(editDone && routeMethod === editRoute){
+          return;
+        }
+        this.mixinAndSetControllerDefinitionObjects();
+        this.set('editDone', true);
       }
-      this.mixinAndSetControllerDefinitionObjects();
-      this.set('editDone', true);
+      this.controller.init();
+      this.set('isSetup', true);
     }
-    this.controller.init();
   },
 
   // Success saving record promisse callback
@@ -179,6 +182,8 @@ export default Ember.Mixin.create(MagicCrud, {
     let routeBase = this.get('routeBase');
     let saveMessage = this.get('saveMessage');
     let flashMessages = Ember.get(this, 'flashMessages');
+
+    this.set('canRollbackModel', false);
 
     controller.get('model').save().then(() => {
       let routeAfter;
@@ -258,9 +263,8 @@ export default Ember.Mixin.create(MagicCrud, {
         controller
       } = getProperties(this, 'controller');
 
-      this.set('canRollbackModel', false);
-
       controller.set('submitted', true);
+
       controller.validate().then(() => {
         this.saveRecordSuccess();
       }, () => {
@@ -275,10 +279,7 @@ export default Ember.Mixin.create(MagicCrud, {
       } = getProperties(this, 'controller');
 
       if(this.isAnActionRoute() && this.get('canRollbackModel')){
-        controller.get('model').rollback();
-        if(controller.get('model').rollbackAttributes){
-          controller.get('model').rollbackAttributes();
-        }
+        controller.get('model').rollbackAttributes();
       }
 
       this.set('canRollbackModel', true);
