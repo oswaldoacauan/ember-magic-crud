@@ -6,6 +6,8 @@ const {
 } = Ember;
 
 export default Ember.Mixin.create({
+  editDone: false,
+
   // Validation Object name
   validationObject: 'validations',
 
@@ -41,8 +43,8 @@ export default Ember.Mixin.create({
     });
   },
 
-  model(){
-    return this.store.createRecord(this.get('routeBase'));
+  model(param){
+    return this.store.findRecord(this.get('routeBase'), param.id);
   },
 
   setupController(controller, model) {
@@ -55,6 +57,9 @@ export default Ember.Mixin.create({
       magicCrudObject,
     } = getProperties(this, 'routeBase', 'validationObject', 'definitionObject', 'magicCrudObject');
 
+    if(this.get('editDone')){
+      return;
+    }
     controller.reopen(MagicCrud);
 
     [validationObject, definitionObject, magicCrudObject].forEach((obj) => {
