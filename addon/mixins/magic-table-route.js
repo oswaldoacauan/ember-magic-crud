@@ -34,7 +34,6 @@ export default Ember.Mixin.create({
 
   setupController(controller, model) {
     this._super(controller, model);
-
     const{
       routeBase
     } = getProperties(this, 'routeBase');
@@ -42,7 +41,7 @@ export default Ember.Mixin.create({
 
     controller.set('tableSortPropertiesMC', this.controllerFor(routeBase).get('tableSortPropertiesMC'));
     controller.set('tableOptionsMC', this.controllerFor(routeBase).get('tableOptionsMC'));
-    
+
     controller.init();
   },
 

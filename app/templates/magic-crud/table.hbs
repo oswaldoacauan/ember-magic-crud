@@ -1,5 +1,4 @@
 <button class="add btn btn-success" type="button" name="button" {{action 'addRecord'}}>Add</button>
-{{currentPath}}
 {{imdt-table
   sortProperties=tableSortPropertiesMC
   content=model
@@ -8,5 +7,3 @@
   deleteRecord='deleteRecord'
   editRecord='editRecord'
   showRecord='showRecord'}}
-
-{{outlet 'magic-form'}}
