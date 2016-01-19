@@ -53,6 +53,12 @@ module.exports = {
          }
          return path.join(options.dasherizedModuleName, 'edit');
        },
+       __indexroutename__: function(options) {
+         if (options.pod) {
+           return 'index/route';
+         }
+         return path.join(options.dasherizedModuleName, 'index');
+       },
        __showroutename__: function(options) {
          if (options.pod) {
            return 'show/route';
