@@ -38,9 +38,7 @@ export default Ember.Mixin.create({
   }),
 
   renderTemplate: function(){
-    this.render('magic-crud/show', {
-      into: 'application'
-    });
+    this.render('magic-crud/show');
   },
 
   model(param){
@@ -48,7 +46,6 @@ export default Ember.Mixin.create({
   },
 
   setupController(controller, model) {
-    console.log('setupController');
     this._super(controller, model);
     const{
       routeBase,
@@ -60,6 +57,7 @@ export default Ember.Mixin.create({
     if(this.get('editDone')){
       return;
     }
+
     controller.reopen(MagicCrud);
 
     [validationObject, definitionObject, magicCrudObject].forEach((obj) => {

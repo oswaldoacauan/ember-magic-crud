@@ -4,6 +4,8 @@ const {
   getProperties
 } = Ember;
 
+import MagicCrud from './magic-crud';
+
 export default Ember.Mixin.create({
   // Delete success message
   deleteMessageSuccess: 'Record deleted',
@@ -30,15 +32,27 @@ export default Ember.Mixin.create({
     return this.get('routeSplit')[0];
   }),
 
+  setupController(controller, model) {
+    this._super(controller, model);
+
+    const{
+      routeBase
+    } = getProperties(this, 'routeBase');
+    controller.reopen(MagicCrud);
+
+    controller.set('tableSortPropertiesMC', this.controllerFor(routeBase).get('tableSortPropertiesMC'));
+    controller.set('tableOptionsMC', this.controllerFor(routeBase).get('tableOptionsMC'));
+    
+    controller.init();
+  },
+
   // Route method name
   routeMethod: Ember.computed('routeSplit', function(){
     return this.get('routeSplit')[1];
   }),
 
   renderTemplate: function(){
-    this.render('magic-crud/table', {
-      into: 'application'
-    });
+    this.render('magic-crud/table');
   },
 
   model(){
