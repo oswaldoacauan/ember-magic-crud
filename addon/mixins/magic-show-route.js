@@ -20,8 +20,6 @@ export default Ember.Mixin.create({
   // Save success message
   saveMessage: 'Record saved successfully',
 
-  canRollbackModel: true,
-
   // Split route name
   routeSplit: Ember.computed('routeName', function(){
     return this.get('routeName').split('.');

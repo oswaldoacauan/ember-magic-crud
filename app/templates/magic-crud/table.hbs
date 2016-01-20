@@ -1,9 +1,7 @@
-<button class="add btn btn-success" type="button" name="button" {{action 'addRecord'}}>Add</button>
+<button class="add btn btn-success" type="button" name="button" {{action 'goToAction' 'add'}}>Add</button>
 {{imdt-table
   sortProperties=tableSortPropertiesMC
   content=model
   tableClassNames='table table-striped table-hover'
   columns=tableOptionsMC
-  deleteRecord='deleteRecord'
-  editRecord='editRecord'
-  showRecord='showRecord'}}
+  goToAction='goToAction'}}

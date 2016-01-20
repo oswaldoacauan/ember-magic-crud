@@ -37,7 +37,7 @@ export default Ember.Mixin.create({
     const{
       routeBase
     } = getProperties(this, 'routeBase');
-    controller.reopen(MagicCrud);
+    // controller.reopen(MagicCrud);
 
     controller.set('tableSortPropertiesMC', this.controllerFor(routeBase).get('tableSortPropertiesMC'));
     controller.set('tableOptionsMC', this.controllerFor(routeBase).get('tableOptionsMC'));
@@ -58,50 +58,41 @@ export default Ember.Mixin.create({
     return this.store.findAll(this.get('routeBase'));
   },
 
+  deleteRecord(item){
+    const{
+      routeBase,
+      deleteMessageSuccess,
+      deleteMessageFailed
+    } = getProperties(this, 'routeBase', 'deleteMessageSuccess', 'deleteMessageFailed');
+
+    this.transitionTo(routeBase);
+    let flashMessages = Ember.get(this, 'flashMessages');
+
+    item.deleteRecord();
+    item.save().then(() => {
+      flashMessages.success(deleteMessageSuccess);
+    },() => {
+      flashMessages.danger(deleteMessageFailed);
+    });
+  },
+
   actions:{
-    showRecord(item){
-      const{
-        routeBase,
-        showRoute
-      } = getProperties(this, 'routeBase', 'showRoute');
-
-      this.transitionTo(routeBase + '.' + showRoute, item);
-    },
-
-    addRecord(){
-      const{
-        routeBase,
-        addRoute
-      } = getProperties(this, 'routeBase', 'addRoute');
-
-      this.transitionTo(routeBase + '.' + addRoute);
-    },
-
-    editRecord(item){
-      const{
-        routeBase,
-        editRoute
-      } = getProperties(this, 'routeBase', 'editRoute');
-
-      this.transitionTo(routeBase + '.' + editRoute, item);
-    },
-
-    deleteRecord(item){
+    goToAction(operation, item){
       const{
         routeBase,
         deleteMessageSuccess,
         deleteMessageFailed
       } = getProperties(this, 'routeBase', 'deleteMessageSuccess', 'deleteMessageFailed');
 
-      this.transitionTo(routeBase);
-      let flashMessages = Ember.get(this, 'flashMessages');
-
-      item.deleteRecord();
-      item.save().then(() => {
-        flashMessages.success(deleteMessageSuccess);
-      },() => {
-        flashMessages.danger(deleteMessageFailed);
-      });
-    },
+      if(operation === 'delete'){
+        this.deleteRecord(item);
+      }
+      else if(operation === 'add'){
+        this.transitionTo(routeBase + '.' + operation);
+      }
+      else{
+        this.transitionTo(routeBase + '.' + operation, item);
+      }
+    }
   }
 });
