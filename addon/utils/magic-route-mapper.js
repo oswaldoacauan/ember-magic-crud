@@ -8,4 +8,4 @@ export default Ember.Object.extend({
       context.route('show', {path:'show/:id'})
     });
   }
-}
+});
