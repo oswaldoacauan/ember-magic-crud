@@ -1,11 +1,12 @@
 import Ember from 'ember';
 import MagicCrud from './magic-crud';
+import MagicBaseRoute from './magic-base-route';
 
 const {
   getProperties
 } = Ember;
 
-export default Ember.Mixin.create({
+export default Ember.Mixin.create(MagicBaseRoute, {
   // Validation Object name
   validationObject: 'validations',
 
@@ -19,21 +20,6 @@ export default Ember.Mixin.create({
   saveMessage: 'Record saved successfully',
 
   canRollbackModel: true,
-
-  // Split route name
-  routeSplit: Ember.computed('routeName', function(){
-    return this.get('routeName').split('.');
-  }),
-
-  // Route base name
-  routeBase: Ember.computed('routeSplit', function(){
-    return this.get('routeSplit')[0];
-  }),
-
-  // Route method name
-  routeMethod: Ember.computed('routeSplit', function(){
-    return this.get('routeSplit')[1];
-  }),
 
   setupController(controller, model) {
     this._super(controller, model);

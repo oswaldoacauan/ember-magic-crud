@@ -1,13 +1,12 @@
 import Ember from 'ember';
 import MagicCrud from './magic-crud';
+import MagicBaseRoute from './magic-base-route';
 
 const {
   getProperties
 } = Ember;
 
-export default Ember.Mixin.create({
-  editDone: false,
-
+export default Ember.Mixin.create(MagicBaseRoute, {
   // Validation Object name
   validationObject: 'validations',
 
@@ -16,24 +15,6 @@ export default Ember.Mixin.create({
 
   // Magic Crud Options object name
   magicCrudObject: 'magicCrud',
-
-  // Save success message
-  saveMessage: 'Record saved successfully',
-
-  // Split route name
-  routeSplit: Ember.computed('routeName', function(){
-    return this.get('routeName').split('.');
-  }),
-
-  // Route base name
-  routeBase: Ember.computed('routeSplit', function(){
-    return this.get('routeSplit')[0];
-  }),
-
-  // Route method name
-  routeMethod: Ember.computed('routeSplit', function(){
-    return this.get('routeSplit')[1];
-  }),
 
   renderTemplate: function(){
     this.render('magic-crud/show');
@@ -51,10 +32,6 @@ export default Ember.Mixin.create({
       definitionObject,
       magicCrudObject,
     } = getProperties(this, 'routeBase', 'validationObject', 'definitionObject', 'magicCrudObject');
-
-    if(this.get('editDone')){
-      return;
-    }
 
     controller.reopen(MagicCrud);
 
