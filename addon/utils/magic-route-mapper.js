@@ -1,4 +1,7 @@
-export default function magicRouteMapper(context, route){
+import Ember from 'ember';
+
+export default Ember.Object.extend({
+  map: function(context, route){
   return context.route(route, function() {
     context.route('add');
     context.route('edit', {path:'edit/:id'});
