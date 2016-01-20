@@ -33,7 +33,7 @@
     {{else if switch}}
       {{bs-switch class="form-control" checked=value on-text='Ativo' off-text='Inativo'}}
     {{else if text}}
-      <input class="form-control" type="{{type}}" value="{{value}}" name="{{attribute}}">
+      {{input class="form-control" type=type value=value name=attribute}}
     {{else if select}}
 
       {{#power-select selected=value options=processedContent onchange=(action (mut value)) as |item|}}
