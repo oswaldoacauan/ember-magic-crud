@@ -7,24 +7,24 @@
     {{else if switch}}
       {{bs-switch class="form-control" checked=value on-text='Ativo' off-text='Inativo' readonly='true'}}
     {{else if text}}
-      <input class="form-control" type="{{type}}" value="{{value}}" name="{{attribute}}" readonly>
+      <p class="form-control-static">{{value}}</p>
     {{else if select}}
-
-      {{#power-select disabled=readonly selected=value options=processedContent onchange=(action (mut value)) as |item|}}
-        <div class="ember-power-select-item">
-          {{power-select-item item=item processedLabel=processedLabel}}
-        </div>
-      {{/power-select}}
-
+      <div class="single-select">
+        <p class="form-control-static">{{valueStringify}}</p>
+      </div>
     {{else if multiSelect}}
 
-      {{ember-selectize
-        multiple=true
-        content=processedContent
-        optionValuePath=processedPath
-        optionLabelPath=processedLabel
-        selection=value
-        disabled=true}}
+    <div class="multi-select">
+      <p class="form-control-static">{{valueStringify}}</p>
+    </div>
+
+    {{ember-selectize
+      multiple=true
+      content=processedContent
+      optionValuePath=processedPath
+      optionLabelPath=processedLabel
+      selection=value
+      disabled=true}}
 
     {{/if}}
   {{else}}

@@ -76,6 +76,23 @@ export default Ember.Component.extend({
     }
   }),
 
+  valueStringify: Ember.computed('model', function(){
+    if(this.get('type') === 'select'){
+      return this.get('model').get(this.get('optionLabelPath'));
+    }
+    else if(this.get('type') === 'multiselect'){
+      console.log(this.get('optionLabelPath'));
+      this.get(this.get('attribute')).forEach((item) => {
+        console.log(item);
+        console.log(item.get('id'));
+      })
+      return 'batata';
+    }
+    else{
+      return this.get('value');
+    }
+  })
+
   // actions:{
   //   multipleSelectChange(array, a){
   //     console.log(array.toString());
