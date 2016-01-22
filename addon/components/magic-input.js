@@ -16,6 +16,9 @@ export default Ember.Component.extend({
       case 'text':
           this.set('text', true);
           break;
+      case 'password':
+          this.set('password', true);
+          break;
       case 'checkbox':
           this.set('checkbox', true);
           break;
