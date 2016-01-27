@@ -1,11 +1,19 @@
-<div class="col-md-12">
-  <button class="add btn btn-success" type="button" name="button" {{action 'goToAction' 'add'}}><i class="fa fa-fw fa-plus"></i>  Adicionar</button>
+<div class="page">
+  <div class="page-header">
+    <h3 class="page-title">
+      {{magicCrud.tableTitle}}
+    </h3>
+  </div>
 
-{{imdt-table
-  sortProperties=tableSortPropertiesMC
-  content=model
-  tableClassNames='table table-striped table-hover table-bordered'
-  columns=tableOptionsMC
-  goToAction='goToAction'}}
-
+  <div class="page-body">
+    <div class="col-md-12">
+      <button class="add btn btn-success" type="button" name="button" {{action 'goToAction' 'add'}}><i class="fa fa-fw fa-plus"></i>  Adicionar</button>
+      {{imdt-table
+        sortProperties=tableSortPropertiesMC
+        content=model
+        tableClassNames='table table-striped table-hover table-bordered'
+        columns=tableOptionsMC
+        goToAction='goToAction'}}
+    </div>
+  </div>
 </div>

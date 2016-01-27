@@ -39,7 +39,7 @@
         {{input class="form-control" type=type value=value name=attribute}}
       {{else if select}}
 
-        {{#power-select selected=value options=processedContent onchange=(action (mut value)) as |item|}}
+        {{#power-select selected=value options=processedContent searchField=processedLabel onchange=(action (mut value)) as |item|}}
           <div class="ember-power-select-item">
             {{power-select-item item=item processedLabel=processedLabel}}
           </div>

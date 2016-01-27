@@ -18,6 +18,7 @@ export default Ember.Mixin.create(MagicBaseRoute, {
       routeBase
     } = getProperties(this, 'routeBase');
 
+    controller.set('magicCrud', this.controllerFor(routeBase).get('magicCrud'));
     controller.set('tableSortPropertiesMC', this.controllerFor(routeBase).get('tableSortPropertiesMC'));
     controller.set('tableOptionsMC', this.controllerFor(routeBase).get('tableOptionsMC'));
 
