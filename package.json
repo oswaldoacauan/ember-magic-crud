@@ -1,11 +1,12 @@
 {
   "name": "ember-imdt-magic-crud",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "Satisfy your CRUD needs.",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
+  "main": "index.js",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
