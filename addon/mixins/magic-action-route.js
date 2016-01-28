@@ -106,10 +106,7 @@ export default Ember.Mixin.create(MagicBaseRoute, {
       } = getProperties(this, 'controller');
 
       if(this.get('canRollbackModel')){
-
-        if(controller.get('model').rollbackAttributes){
-          controller.get('model').rollbackAttributes();
-        }
+        controller.get('model').rollbackAttributes();
       }
 
       this.set('canRollbackModel', true);
