@@ -2,6 +2,10 @@
   <div class="page-header">
     <h3 class="page-title">
       {{magicCrud.crudTitle}}
+      {{#if model.id}}
+        <small>#{{model.id}}</small>
+        <small class="pull-right"><b>Última Alteração:</b> {{moment-format model.modificacao 'L' allow-empty=true}}</small>
+      {{/if}}
     </h3>
   </div>
 

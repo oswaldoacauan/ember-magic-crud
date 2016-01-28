@@ -1,5 +1,5 @@
-<div class="row">
-  <div class="form-group col-md-12 {{if activeErrors 'has-error'}}">
+
+  <div class="form-group {{if className className 'col-md-12'}} {{if activeErrors 'has-error'}}">
     <label for="{{attribute}}">{{label}}</label>
 
     {{#if readonly}}
@@ -57,5 +57,3 @@
       {{/if}}
     {{/if}}
   </div>
-
-</div>

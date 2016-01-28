@@ -1,8 +1,9 @@
-<div>
+<div class="row">
   {{#each definitions as |definition|}}
     {{magic-input
       model=model
       attribute=definition.attribute
+      className=definition.className
       label=definition.label
       type=definition.type
       selectFunction=definition.selectFunction
