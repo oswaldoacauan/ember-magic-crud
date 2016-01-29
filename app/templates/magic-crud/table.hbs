@@ -1,13 +1,14 @@
 <div class="page">
-  <div class="page-header">
-    <h3 class="page-title">
+  <div class="page-header ">
+    <h3 class="page-title pull-left">
       {{magicCrud.tableTitle}}
     </h3>
+    <button class="add btn btn-sm btn-success" type="button" name="button" {{action 'goToAction' 'add'}}><i class="fa fa-fw fa-plus"></i>  Adicionar</button>
   </div>
+
 
   <div class="page-body row">
     <div class="col-md-12">
-      <button class="add btn btn-success" type="button" name="button" {{action 'goToAction' 'add'}}><i class="fa fa-fw fa-plus"></i>  Adicionar</button>
       {{imdt-table
         sortProperties=tableSortPropertiesMC
         content=model
